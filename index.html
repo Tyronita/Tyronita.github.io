@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evan O'Leary</title>
+<meta name="description" content="Evan O'Leary: AI engineer building agents, benchmarks and kernels for science and lab automation. London.">
+<meta property="og:title" content="Evan O'Leary">
+<meta property="og:description" content="AI engineer: agent benchmarks for lab automation, GPU/TPU kernels, RL environments, protein language models.">
+<meta property="og:image" content="https://tyronita.github.io/assets/img/text2wetlab-pipeline.png">
+<link rel="icon" href="assets/img/avatar.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfaf8; --surface:#ffffff; --ink:#16181d; --muted:#5b6170; --line:#e6e3dd;
+  --accent:#d1495b; --accent-soft:#fbe9eb; --chip:#f1efea; --gold:#b7791f;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1115; --surface:#171a20; --ink:#eceef2; --muted:#9aa1ad; --line:#272b33;
+    --accent:#f0717f; --accent-soft:#2a1a1d; --chip:#1f232a; --gold:#e3b04b;
+    --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1115; --surface:#171a20; --ink:#eceef2; --muted:#9aa1ad; --line:#272b33;
+  --accent:#f0717f; --accent-soft:#2a1a1d; --chip:#1f232a; --gold:#e3b04b; --shadow:none;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration-color:var(--line);text-underline-offset:3px}
+a:hover{color:var(--accent);text-decoration-color:var(--accent)}
+img{max-width:100%;display:block}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:56px;overflow-x:auto;scrollbar-width:none}
+nav .brand{font-weight:700;text-decoration:none;white-space:nowrap;margin-right:auto}
+nav a.l{font-size:14px;color:var(--muted);text-decoration:none;white-space:nowrap}
+nav a.l:hover{color:var(--ink)}
+#theme{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:4px 8px;cursor:pointer;font:inherit;font-size:13px}
+
+header.hero{padding:64px 0 40px}
+.hero-grid{display:grid;grid-template-columns:120px 1fr;gap:28px;align-items:center}
+.avatar{width:120px;height:120px;border-radius:50%;border:3px solid var(--surface);box-shadow:var(--shadow)}
+h1{font-size:clamp(32px,5vw,48px);line-height:1.1;margin:0 0 8px;letter-spacing:-.02em}
+.tag{font-size:clamp(17px,2.2vw,20px);color:var(--muted);margin:0 0 16px;max-width:720px}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;font-size:14px;text-decoration:none;background:var(--surface)}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.primary:hover{color:var(--bg);opacity:.9}
+
+.wins{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:8px 0 0}
+.win{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+.win b{display:block;font-size:15px}
+.win span{font-size:13px;color:var(--muted)}
+.win .medal{color:var(--gold);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+
+section{padding:48px 0;border-top:1px solid var(--line)}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 24px;font-weight:600}
+h3{font-size:20px;margin:0 0 4px;letter-spacing:-.01em}
+
+.feature{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;padding:28px 0}
+.feature+.feature{border-top:1px dashed var(--line)}
+.feature:nth-of-type(even) .media{order:2}
+.media{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.media img{width:100%;height:auto}
+.meta{font-size:13px;color:var(--muted);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+.feature p{margin:8px 0 12px;color:var(--ink)}
+.feature ul{margin:0 0 14px;padding-left:18px;color:var(--muted);font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{font-size:12px;padding:3px 8px;border-radius:6px;background:var(--chip);color:var(--muted);font-family:'JetBrains Mono',monospace}
+.chip.hot{background:var(--accent-soft);color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;font-weight:500}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.card h4{margin:0 0 6px;font-size:16px}
+.card p{margin:0 0 10px;font-size:14px;color:var(--muted);flex:1}
+.card .row{font-size:13px}
+.card img{border-radius:8px;margin-bottom:12px;border:1px solid var(--line);aspect-ratio:16/9;object-fit:cover;background:#fff}
+.group{margin:28px 0 12px;font-weight:600;font-size:15px}
+.group:first-of-type{margin-top:0}
+
+.tl{display:grid;gap:22px}
+.job{display:grid;grid-template-columns:170px 1fr;gap:20px}
+.job .when{font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;padding-top:3px}
+.job h3{font-size:17px}
+.job .role{color:var(--muted);font-size:14px;margin-bottom:6px}
+.job ul{margin:0;padding-left:18px;font-size:15px}
+.job li{margin:2px 0}
+
+.list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px 24px}
+.list li{font-size:14px;padding:6px 0;border-bottom:1px solid var(--line)}
+.list li b{font-weight:600}
+.list li span{color:var(--muted)}
+.lock{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:4px}
+
+.skills{display:grid;grid-template-columns:150px 1fr;gap:8px 20px;font-size:15px}
+.skills dt{color:var(--muted);font-size:14px}
+.skills dd{margin:0}
+footer{padding:32px 0 48px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+
+@media (max-width:760px){
+  .hero-grid{grid-template-columns:1fr;gap:16px}
+  .avatar{width:88px;height:88px}
+  .feature{grid-template-columns:1fr;gap:16px}
+  .feature:nth-of-type(even) .media{order:0}
+  .job{grid-template-columns:1fr;gap:4px}
+  .skills{grid-template-columns:1fr;gap:2px}
+  .skills dd{margin-bottom:10px}
+  header.hero{padding:36px 0 28px}
+}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="#">Evan O'Leary</a>
+  <a class="l" href="#work">Work</a>
+  <a class="l" href="#research">Research</a>
+  <a class="l" href="#experience">Experience</a>
+  <a class="l" href="#projects">All projects</a>
+  <a class="l" href="#education">Education</a>
+  <button id="theme" aria-label="Toggle colour theme">◐</button>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <div class="hero-grid">
+    <img class="avatar" src="assets/img/avatar.jpg" alt="Evan O'Leary">
+    <div>
+      <h1>Evan O'Leary</h1>
+      <p class="tag">AI engineer in London. I build agents and the benchmarks that keep them honest: for wet-lab automation, GPU/TPU kernels, hardware design and protein models. Day job: data-engineering agents at JPMorgan Chase.</p>
+      <div class="links">
+        <a class="btn primary" href="mailto:evan.oleary99@gmail.com">Email</a>
+        <a class="btn" href="https://github.com/Tyronita">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/evan-oleary1/">LinkedIn</a>
+        <a class="btn" href="https://huggingface.co/EvanOLeary">Hugging Face</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wins" style="margin-top:36px">
+    <div class="win"><div class="medal">Grand winner · Oct 2026</div><b>Anthropic Science Hackathon</b><span>Text2WetLab. Track 2 + Modal prize, 250 builders</span></div>
+    <div class="win"><div class="medal">1st place · Aug 2026</div><b>VLGE Hackathon, San Francisco</b><span>Ignis: RL wildfire suppression</span></div>
+    <div class="win"><div class="medal">2nd place · May 2026</div><b>Poolside × NVIDIA Research Hack</b><span>Laguna-Dense CUDA kernel model</span></div>
+    <div class="win"><div class="medal">Merged PR · 2026</div><b>Sakana AI ShinkaEvolve</b><span>Verilog/RTL support, 27/45 designs beat human</span></div>
+  </div>
+</div></header>
+
+<!-- ===================== FEATURED ===================== -->
+<section id="work"><div class="wrap">
+  <h2>Featured work</h2>
+
+  <article class="feature">
+    <a class="media" href="https://github.com/PhysicalAIBenchmarks/Text2WetLab"><img src="assets/img/text2wetlab-trailer.gif" alt="Text2WetLab trailer: OT-2 robot running an agent-written protocol" loading="lazy"></a>
+    <div>
+      <div class="meta">Oct 2026 – present · PhysicalAIBenchmarks</div>
+      <h3>Text2WetLab</h3>
+      <div class="chips"><span class="chip hot">🏆 Anthropic Science Hackathon grand winner</span><span class="chip">Opentrons OT-2</span><span class="chip">MuJoCo</span><span class="chip">Harbor</span></div>
+      <p>A benchmark that tests whether AI agents can turn the methods sections of published papers into executable liquid-handling robot protocols, aimed at science's reproducibility crisis.</p>
+      <ul>
+        <li>11 expert-annotated tasks, growing to 25 toward publication</li>
+        <li>Graded on wet-lab correctness the simulator doesn't check: mixing, bead carry-over, well volumes</li>
+        <li>Now working with UniteLabs and the NHS to take it to production</li>
+      </ul>
+      <div class="row">
+        <a href="https://github.com/PhysicalAIBenchmarks/Text2WetLab">GitHub ↗</a>
+        <a href="https://physicalaibenchmarks.github.io/Text2WetLab/leaderboard.html">Leaderboard ↗</a>
+        <a href="https://physicalaibenchmarks.github.io/Text2WetLab/docs/preprint/preprint.html">Preprint ↗</a>
+        <a href="https://github.com/PhysicalAIBenchmarks/opentrons-mujoco-viz">MuJoCo viz ↗</a>
+        <a href="https://www.linkedin.com/feed/update/urn:li:activity:7513701584187473920/">Presentation ↗</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="feature">
+    <a class="media" href="https://tyronita.github.io/ignis/"><img src="assets/img/ignis-compare.gif" alt="Ignis: unmanaged fire spread vs. RL agent suppression" loading="lazy"></a>
+    <div>
+      <div class="meta">Aug 2026 · VLGE Hackathon, San Francisco</div>
+      <h3>Ignis: RL for wildfire suppression</h3>
+      <div class="chips"><span class="chip hot">🥇 1st place</span><span class="chip">Gymnasium</span><span class="chip">NumPy</span><span class="chip">CEM / PPO</span></div>
+      <p>A fast fire-spread simulator and RL sandbox, built in 6 hours. An air-tanker agent learns where to drop water. The trained agent saves about 98% of fuel, against 42% with no intervention. Judged by researchers from NVIDIA, Project Prometheus and NASA.</p>
+      <ul>
+        <li>2D wind-driven, 3D terrain (fire climbs uphill) and indoor voxel buildings</li>
+        <li>Pip-installable Gymnasium environments, listed via a PR to Farama's Gymnasium</li>
+      </ul>
+      <div class="row">
+        <a href="https://tyronita.github.io/ignis/">Live presentation ↗</a>
+        <a href="https://github.com/Tyronita/ignis">GitHub ↗</a>
+        <a href="https://github.com/Farama-Foundation/Gymnasium/pull/1650">Gymnasium PR ↗</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="feature">
+    <a class="media" href="https://github.com/Tyronita/laguna-dense-cuda-kernels"><img src="assets/img/laguna-overview.png" alt="Laguna-Dense training pipeline overview" loading="lazy"></a>
+    <div>
+      <div class="meta">May 2026 · Poolside × NVIDIA Research Hackathon</div>
+      <h3>Laguna-Dense: a 3B CUDA kernel generator</h3>
+      <div class="chips"><span class="chip hot">🥈 2nd place</span><span class="chip">MoE → dense</span><span class="chip">GRPO</span><span class="chip">vLLM</span></div>
+      <p>Distilled Poolside's 33B, 256-expert Laguna XS.2 MoE into a 3B fully dense model. Then SFT and GRPO on the Sakana AI CUDA Engineer archive for KernelBench-style kernel optimisation, with a vLLM engine for fast pass@k evaluation.</p>
+      <div class="row">
+        <a href="https://github.com/Tyronita/laguna-dense-cuda-kernels">GitHub ↗</a>
+        <a href="https://huggingface.co/EvanOLeary/laguna-xs2-dense-k8-cuda-sft">Model on HF ↗</a>
+        <a href="https://github.com/cm2435/laguna-xs2-expert-coactivation-scheduling">Team project ↗</a>
+      </div>
+    </div>
+  </article>
+
+  <article class="feature">
+    <a class="media" href="https://github.com/Tyronita/RTLLM-ShinkaEvolve-results"><img src="assets/img/rtllm-growth.png" alt="PPA score climbing over generations of evolutionary search" loading="lazy"></a>
+    <div>
+      <div class="meta">2026 · Open source</div>
+      <h3>Evolving Verilog with ShinkaEvolve</h3>
+      <div class="chips"><span class="chip hot">Merged into Sakana AI</span><span class="chip">Verilog</span><span class="chip">Yosys</span><span class="chip">formal equivalence</span></div>
+      <p>Added Verilog/SystemVerilog support to Sakana AI's evolutionary program search, gated by Yosys SAT-equivalence checking. Evolved designs beat the human reference on 27 of 45 RTLLM v2.0 designs for area, depth and power. The best result scored 175 against the reference's 100.</p>
+      <div class="row">
+        <a href="https://github.com/SakanaAI/ShinkaEvolve/pull/137">PR #137 ↗</a>
+        <a href="https://github.com/Tyronita/RTLLM-ShinkaEvolve-results">Results ↗</a>
+      </div>
+    </div>
+  </article>
+</div></section>
+
+<!-- ===================== RESEARCH ===================== -->
+<section id="research"><div class="wrap">
+  <h2>Benchmarks &amp; research</h2>
+  <div class="grid">
+    <div class="card">
+      <h4>PallasBench</h4>
+      <p>The first benchmark for LLM-generated JAX Pallas kernels on TPU and GPU. Three difficulty levels, correctness-gated speedup scoring against JAX baselines, robustness filters, CI and a Hugging Face dataset.</p>
+      <div class="chips"><span class="chip">JAX</span><span class="chip">Pallas</span><span class="chip">TPU</span></div>
+      <div class="row"><a href="https://github.com/Tyronita/JaxPallasBench">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>JaxBench</h4>
+      <p>KernelBench, except the thing being optimised is JAX itself. Agents rewrite C++/CUDA hot paths and XLA passes, JAX is rebuilt, and the score is the speedup of the real library, gated on correctness.</p>
+      <div class="chips"><span class="chip">C++</span><span class="chip">XLA</span><span class="chip">ShinkaEvolve</span></div>
+      <div class="row"><a href="https://github.com/Tyronita/JaxBench">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>LewyGym</h4>
+      <p>A ProteinGym-compatible benchmark for zero-shot variant effect prediction across the Parkinson's gene panel (SNCA, LRRK2, GBA, PRKN, PINK1…). Finding: ESM-2's signal inverts on SNCA, and larger models make it worse.</p>
+      <div class="chips"><span class="chip">protein LMs</span><span class="chip">ESM-2</span><span class="chip">Parkinson's</span></div>
+      <div class="row"><a href="https://github.com/Tyronita/LewyGym">GitHub ↗</a><a href="https://huggingface.co/datasets/Tyronita/LewyGym">Dataset ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>ESM-2 650M inference optimisation</h4>
+      <p>Reproduces the published ProteinGym baseline for ESM-2 650M (ρ = 0.414) on Modal A100s, pinned to exact SHAs. Compares masked-marginal, batched and single-pass scoring, followed by kernel-level work in Mojo, CuteDSL, Pallas and quantisation.</p>
+      <div class="chips"><span class="chip">PyTorch</span><span class="chip">Modal</span><span class="chip">ProteinGym</span></div>
+      <div class="row"><a href="https://github.com/Tyronita/esm2-inference-opt">Inference ↗</a><a href="https://github.com/Tyronita/esm2-kernel-opt">Kernels ↗</a><a href="https://github.com/Tyronita/protein-language-model-experiments-esm2_t33_650M_UR50D">Harness ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Erdős Math Emporium</h4>
+      <p>Ten parallel ShinkaEvolve instances attack open Erdős problems, with Lean 4 proof verification and a live constellation UI. Built at the {Tech: Europe} London AI Hackathon.</p>
+      <div class="chips"><span class="chip">Lean 4</span><span class="chip">Next.js</span><span class="chip">Gemini</span></div>
+      <div class="row"><a href="https://math-emporium-tau.vercel.app">Live ↗</a><a href="https://github.com/Tyronita/math-emporium">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Alxandria</h4>
+      <p>An autonomous research agent that finds related work, writes code and runs experiments on Kaggle. 3rd place (£1,000) at the Perplexity AI Hackathon, London.</p>
+      <div class="chips"><span class="chip">Perplexity Sonar</span><span class="chip">FastAPI</span><span class="chip">React</span></div>
+      <div class="row"><a href="https://devpost.com/software/alxandria">Devpost ↗</a><a href="https://github.com/Tyronita/Alxandria">GitHub ↗</a></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== EXPERIENCE ===================== -->
+<section id="experience"><div class="wrap">
+  <h2>Experience</h2>
+  <div class="tl">
+    <div class="job">
+      <div class="when">Sep 2025 – now</div>
+      <div>
+        <h3>JPMorgan Chase &amp; Co.</h3>
+        <div class="role">AI Engineer / Backend Engineer · London</div>
+        <ul>
+          <li>Engineering lead for a firmwide data-engineering agent covering discovery, lineage, data quality, and ETL generation on Databricks and Snowflake. Demoed to the Operating Committee.</li>
+          <li>Grew the team from 2 to 10. Cut one line of business's pipeline cycle from 2 days to 3 hours. Marked for early promotion.</li>
+          <li>Built the agent eval harness with regression gating on every release, DSPy prompt optimisation, and MCP tool suites for Databricks, Snowflake, Redshift, Athena and Glue.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="when">2024 – 2025</div>
+      <div>
+        <h3>Emenate</h3>
+        <div class="role">Founder · AI video understanding · Bath / London</div>
+        <ul>
+          <li>Vision-language models for retail loss prevention, taken to a live in-store pilot in Bath that was sold door-to-door.</li>
+          <li>RAG over video-caption embeddings on AWS with Qdrant, and a Ray cluster for distributed video inference.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="when">Jun – Aug 2024</div>
+      <div>
+        <h3>JPMorgan Chase &amp; Co.</h3>
+        <div class="role">Backend Developer Intern · Kafka Streams, Kubernetes</div>
+        <ul><li>Consolidated the Nutmeg Direct Debits Kafka Streams topology from 7 subtopologies into 1, cutting latency and 1.5k lines of code.</li></ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="when">Jun 2023 – Jun 2024</div>
+      <div>
+        <h3>Nomura</h3>
+        <div class="role">Full-stack Developer / SRE · London</div>
+        <ul><li>Trade-data services on KDB+, gRPC APIs, and ML feature pipelines and a model registry for the desk.</li></ul>
+      </div>
+    </div>
+    <div class="job">
+      <div class="when">Jun – Aug 2022</div>
+      <div>
+        <h3>Propflo</h3>
+        <div class="role">Full-stack Developer · PropTech start-up · Bristol</div>
+        <ul><li>A mortgage-ability API over a dataset of 29M+ properties, plus Next.js/FastAPI buyer-readiness features.</li></ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ===================== ALL PROJECTS ===================== -->
+<section id="projects"><div class="wrap">
+  <h2>All projects</h2>
+
+  <div class="group">Robotics &amp; RL</div>
+  <div class="grid">
+    <div class="card">
+      <img src="assets/img/text2wetlab-3d.png" alt="3D render of a Golden Gate assembly protocol on the OT-2" loading="lazy">
+      <h4>opentrons-mujoco-viz</h4>
+      <p>A 3D MuJoCo renderer for Opentrons OT-2 protocols, driven by <code>opentrons_simulate</code> logs. It powers the Text2WetLab videos.</p>
+      <div class="row"><a href="https://github.com/PhysicalAIBenchmarks/opentrons-mujoco-viz">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <img src="assets/img/ignis-3d.gif" alt="Ignis 3D terrain fire" loading="lazy">
+      <h4>Ignis: 3D terrain &amp; indoor</h4>
+      <p>Slope-coupled fire spread on heightmaps, and voxel buildings where fire fills rooms and crosses doorways, scored by an eval harness.</p>
+      <div class="row"><a href="https://github.com/Tyronita/ignis">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Project Automaton</h4>
+      <p>Intrinsic's AI for Industry Challenge: cable-insertion policies in MuJoCo, Isaac Lab, Gazebo and ROS 2, with SO-101 tooling.</p>
+      <div class="row"><a href="https://github.com/Ice-Citron/Project-Automaton">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>ROS2 Summer School, FH Aachen</h4>
+      <p>Top of the postgraduate cohort. Autonomous navigation following AprilTags, plus fine-tuned YOLOv8 bottle detection in Nav2 and Isaac Sim.</p>
+      <div class="row"><a href="https://github.com/Tyronita/ROSSummerSchool2025">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>RobotLearningMonolith</h4>
+      <p>Coursework and experiments for the SO-101 robot-learning course on LeRobot.</p>
+      <div class="row"><a href="https://github.com/Tyronita/RobotLearningMonolith">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Deep RL for continuous control</h4>
+      <p>University of Bath RL unit (87%): PyTorch implementations of deep RL agents across continuous-control environments.</p>
+      <div class="row"><a href="https://github.com/BATHRL69/69-environments">GitHub ↗</a><a href="https://www.youtube.com/watch?v=UoLNBn4MH9M">Video ↗</a></div>
+    </div>
+  </div>
+
+  <div class="group">Kernels, compilers &amp; evolutionary search</div>
+  <div class="grid">
+    <div class="card">
+      <img src="assets/img/rtllm-collage.png" alt="Collage of evolved Verilog design results" loading="lazy">
+      <h4>RTLLM × ShinkaEvolve results</h4>
+      <p>Per-design PPA results, reward-hack audits and figures for the evolved Verilog work.</p>
+      <div class="row"><a href="https://github.com/Tyronita/RTLLM-ShinkaEvolve-results">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <img src="assets/img/laguna-experts.png" alt="Laguna MoE expert activation plot" loading="lazy">
+      <h4>Laguna expert co-activation</h4>
+      <p>Expert-activation analysis across code datasets that informed the MoE → dense densification.</p>
+      <div class="row"><a href="https://github.com/Tyronita/laguna-dense-cuda-kernels">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>ShinkaEvolve × CARE-PD</h4>
+      <p>Evolutionary program search on CARE-PD, a Parkinson's gait dataset.</p>
+      <div class="row"><a href="https://github.com/Tyronita/ShinkaEvolveCarePD">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Upstream contributions</h4>
+      <p>Merged Verilog support in Sakana AI's ShinkaEvolve and a Gymnasium environment listing, plus working forks of JAX, PyTorch, ESM, openevolve and LeRobot.</p>
+      <div class="row"><a href="https://github.com/SakanaAI/ShinkaEvolve/pull/137">ShinkaEvolve ↗</a><a href="https://github.com/Farama-Foundation/Gymnasium/pull/1650">Gymnasium ↗</a></div>
+    </div>
+  </div>
+
+  <div class="group">Agents, video &amp; applied AI</div>
+  <div class="grid">
+    <div class="card">
+      <h4>HoneyPot</h4>
+      <p>A UK scam-call honeypot. AI voice personas waste scammers' time, and the transcripts are categorised to publish trends that protect vulnerable people.</p>
+      <div class="row"><a href="https://github.com/Tyronita/HoneyPot">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Project Halo</h4>
+      <p>Real-time video risk detection for suicide prevention. Won Tech for Good at BathHack 2022 and was later extended with suicidology researchers.</p>
+      <div class="row"><a href="https://devpost.com/software/project-halo">Devpost ↗</a><a href="https://github.com/Tyronita/BathHack2022">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Medication voice agent</h4>
+      <p>A voice agent and carer dashboard for elderly medication reminders. Won 2 prizes at the AI Engine Hackathon (Best Use of ACI.dev, Largest System Built).</p>
+      <div class="row"><a href="https://www.linkedin.com/feed/update/urn:li:activity:7358188568592162816/">Post ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Mówka · HackAvengers Warsaw</h4>
+      <p>Team hackathon project.</p>
+      <div class="row"><a href="https://github.com/snowcodeer/HackAvengers-Warsaw">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Arcadeus</h4>
+      <p>An Excel add-in for M&amp;A and private-equity financial modelling.</p>
+      <div class="row"><a href="https://github.com/KyleziNho/Arcadeus">GitHub ↗</a></div>
+    </div>
+    <div class="card">
+      <h4>Video-MME long-video samples</h4>
+      <p>Hardest long-video samples per category, used for Emenate's VLM research.</p>
+      <div class="row"><a href="https://github.com/Tyronita/HardestMME">GitHub ↗</a></div>
+    </div>
+  </div>
+
+  <div class="group">Earlier work &amp; small builds</div>
+  <ul class="list">
+    <li><a href="https://github.com/Tyronita/Fraud-Detection"><b>Fraud-Detection</b></a> <span>· A-level ensemble model, 95% F1, hand-written gradient descent</span></li>
+    <li><a href="https://github.com/Tyronita/Cracking-Enigma-Codes"><b>Cracking-Enigma-Codes</b></a> <span>· Enigma machine simulation, 5 codes cracked</span></li>
+    <li><a href="https://github.com/Tyronita/Sudoku-Puzzle-Solver"><b>Sudoku-Puzzle-Solver</b></a> <span>· arc consistency + backtracking DFS</span></li>
+    <li><a href="https://github.com/Tyronita/combinators-haskell"><b>combinators-haskell</b></a> <span>· lambda calculus via SKI combinators</span></li>
+    <li><a href="https://github.com/Tyronita/Scala99Problems"><b>Scala99Problems</b></a> <span>· Scala 99 problems</span></li>
+    <li><a href="https://github.com/Tyronita/LeetCode75Python"><b>LeetCode75Python</b></a> <span>· LeetCode 75 problem set</span></li>
+    <li><a href="https://github.com/Tyronita/pytorch-model-in-15-minutes"><b>pytorch-model-in-15-minutes</b></a> <span>· a CNN image classifier, built quickly</span></li>
+    <li><a href="https://github.com/Tyronita/React-Study-App"><b>React-Study-App</b></a> <span>· student productivity and wellbeing tracker</span></li>
+    <li><a href="https://github.com/Tyronita/hvac-design-play"><b>hvac-design-play</b></a> <span>· HVAC design prototype</span></li>
+    <li><a href="https://github.com/Tyronita/robo-vid-hub"><b>robo-vid-hub</b></a> <span>· robot video hub prototype</span></li>
+    <li><a href="https://github.com/Tyronita/CharacterWarriorHanzi"><b>CharacterWarriorHanzi</b></a> <span>· a Mandarin character game</span></li>
+    <li><a href="https://github.com/Tyronita/SuenosLandingPage"><b>SuenosLandingPage</b></a> <span>· one of my first websites (2018)</span></li>
+    <li><a href="https://github.com/Tyronita/hangman-game"><b>hangman-game</b></a> <span>· API-driven hangman</span></li>
+    <li><a href="https://github.com/Tyronita/javascript-notes-app"><b>javascript-notes-app</b></a> <span>· vanilla JS notes</span></li>
+    <li><a href="https://github.com/Tyronita/javascript-todo-app"><b>javascript-todo-app</b></a> <span>· vanilla JS to-dos</span></li>
+    <li><a href="https://github.com/Tyronita/javascript-bookmarker-app"><b>javascript-bookmarker-app</b></a> <span>· localStorage bookmarks</span></li>
+    <li><a href="https://github.com/Tyronita/basic-calculator"><b>basic-calculator</b></a> <span>· the very first one (2019)</span></li>
+  </ul>
+
+  <div class="group">Private work</div>
+  <ul class="list">
+    <li><b>Emenate video RAG</b><span class="lock">private</span> <span>· LLaVA-NeXT, FAISS/Qdrant, Video-MME evals</span></li>
+    <li><b>OmniMouse Evolve</b><span class="lock">private</span> <span>· evolutionary optimisation of neural-data loading</span></li>
+    <li><b>London data audit</b><span class="lock">private</span> <span>· 1,312 London open datasets audited, NVIDIA Hack for Impact</span></li>
+    <li><b>LeetBio</b><span class="lock">private</span> <span>· LeetCode-style challenges for biology</span></li>
+    <li><b>Metal XGBoost</b><span class="lock">private</span> <span>· proof of concept for gradient boosting on Apple Metal</span></li>
+    <li><b>Nojos</b><span class="lock">private</span> <span>· on-device notification privacy, Cactus Compute hack</span></li>
+    <li><b>StealMyStyle</b><span class="lock">private</span> <span>· "Shazam for fashion"</span></li>
+    <li><b>Graphics engine &amp; ray tracer</b><span class="lock">private</span> <span>· C++, photon mapping (86%)</span></li>
+  </ul>
+</div></section>
+
+<!-- ===================== EDUCATION ===================== -->
+<section id="education"><div class="wrap">
+  <h2>Education &amp; fellowships</h2>
+  <div class="tl">
+    <div class="job"><div class="when">2021 – 2025</div><div><h3>University of Bath</h3><div class="role">BSc Computer Science with Placement Year · First-Class Honours</div></div></div>
+    <div class="job"><div class="when">Sep 2025</div><div><h3>FH Aachen: ROS2 Robotics Summer School</h3><div class="role">Top of the postgraduate cohort</div></div></div>
+    <div class="job"><div class="when">2026</div><div><h3>Silicon Valley Fellowship · Y Combinator Startup School Paris</h3><div class="role">Fellow (~2% acceptance) · selected participant</div></div></div>
+    <div class="job"><div class="when">2024 – 2026</div><div><h3>Perplexity Business AI Fellowship · Acceler8 (Bath)</h3><div class="role">Sessions with Jensen Huang, Aravind Srinivas, Ali Ghodsi · mentored by Christian Owens (Paddle)</div></div></div>
+  </div>
+
+  <h2 style="margin-top:48px">Skills</h2>
+  <dl class="skills">
+    <dt>Languages</dt><dd>Python, Scala, TypeScript, SQL, C++, CUDA, Verilog, Bash</dd>
+    <dt>ML &amp; AI</dt><dd>PyTorch, JAX/Pallas, vLLM, GRPO, DSPy, RAG &amp; vector search, Hugging Face, MCP, agent evaluation</dd>
+    <dt>RL &amp; robotics</dt><dd>Gymnasium, Stable-Baselines3, MuJoCo, Opentrons, ROS2, NVIDIA Isaac Sim</dd>
+    <dt>Data &amp; cloud</dt><dd>PySpark, Databricks, Snowflake, Kafka, AWS, Terraform, Kubernetes, Ray, Modal</dd>
+    <dt>Hardware / EDA</dt><dd>Yosys, ABC, Icarus Verilog, formal equivalence</dd>
+  </dl>
+</div></section>
+
+<footer><div class="wrap">
+  © 2026 Evan O'Leary · <a href="https://github.com/Tyronita/Tyronita.github.io">Source</a>
+</div></footer>
+
+<script>
+(function(){
+  var root=document.documentElement, key='theme';
+  try{var s=localStorage.getItem(key); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  document.getElementById('theme').addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    var next=cur==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem(key,next);}catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
